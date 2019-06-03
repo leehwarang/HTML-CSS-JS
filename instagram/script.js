@@ -21,7 +21,7 @@ function windowOnClick(event) {
 function Scroll() {
   var ypos = window.pageYOffset;
 
-  if (ypos > 100) {
+  if (ypos > 50) {
     header_wrap.classList.add("short-header-wrap");
     header.classList.add("short-header");
     second_logo.classList.add("hide-second-logo");
