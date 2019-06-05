@@ -8,6 +8,7 @@ class Game {
       .fill(7)
       .map(x => Array(8).fill(7));
     this.currentStoneColor;
+    this.currentStoneState = "white";
     this.allDirection = [
       [-1, 0], // 상
       [1, 0], // 하
@@ -20,11 +21,27 @@ class Game {
     ];
   }
 
+  printBoard() {
+    console.log(this.board);
+  }
+
   initBoard() {
     this.board[3][3] = 0;
     this.board[4][4] = 0;
     this.board[3][4] = 1;
     this.board[4][3] = 1;
+  }
+
+  changeTurn() {
+    if (this.currentStoneState === "white") {
+      this.currentStoneState = "black";
+      this.currentStoneColor = 1;
+    } else {
+      this.currentStoneState = "white";
+      this.currentStoneColor = 0;
+    }
+
+    return this.currentStoneState;
   }
 
   checkSamePosition(row, column) {
@@ -132,45 +149,33 @@ class Game {
     }
   }
 
-  updateBoard(row, column, firstTurn) {
-    this.currentStoneColor = firstTurn === "white" ? 0 : 1;
+  updateBoard(row, column) {
+    this.currentStoneColor = this.currentStoneState === "white" ? 0 : 1;
 
     if (this.checkSamePosition(row, column)) {
       console.log("이미 돌이 놓여져 있는 자리 입니다.");
-      return firstTurn;
+      return this.currentStoneState;
     }
 
     this.allDirection.forEach((coordinate, index) => {
       this.searchUniqueDirection(coordinate, index, row, column);
     });
 
-    console.log(this.board);
+    this.printBoard();
 
-    if (this.currentStoneColor === 0) {
-      this.white.turn = false;
-      this.black.turn = true;
-      firstTurn = "black";
-    } else {
-      this.white.turn = true;
-      this.black.turn = false;
-      firstTurn = "white";
-    }
-
-    return firstTurn;
+    this.changeTurn();
   }
 }
 
 class Black {
   constructor() {
     this.stone = 32;
-    this.turn = false;
   }
 }
 
 class White {
   constructor() {
     this.stone = 32;
-    this.turn = true;
   }
 }
 
