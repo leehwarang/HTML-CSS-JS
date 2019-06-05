@@ -6,13 +6,14 @@ const inputPrompt = readline.createInterface({
   output: process.stdout
 });
 
-const game = new Game(inputPrompt);
+const game = new Game();
 
 console.log("quit을 입력하면 프로그램이 종료됩니다.");
 
 game.initBoard();
+
 let firstTurn = game.white.turn ? "white" : "black";
-console.log(`***${firstTurn}***의 차례입니다.`);
+console.log(`===${firstTurn}의 차례입니다.`);
 inputPrompt.setPrompt(
   "행과 열을 나타내는 두 개의 숫자를 공백으로 구분하여 입력하세요. : "
 );
@@ -25,12 +26,10 @@ inputPrompt.on("line", userInput => {
   column = Number(userInput[1]);
 
   firstTurn = game.updateBoard(row, column, firstTurn);
-  console.log(`***${firstTurn}***의 차례입니다.`);
+  console.log(`===${firstTurn}===의 차례입니다.`);
   inputPrompt.prompt();
 });
 
 inputPrompt.on("close", () => {
   process.exit();
 });
-
-// module.exports = inputPrompt;
