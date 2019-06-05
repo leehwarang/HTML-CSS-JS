@@ -31,37 +31,30 @@ class Game {
     return this.board[row][column] === 1 || this.board[row][column] === 0;
   }
 
-  searchUniqueDirection(startRow, startColumn, firstTurn, coordinate, index) {
-    // console.log(startRow, startColumn, firstTurn, coordinate, index);
+  searchUniqueDirection(coordinate, index, startRow, startColumn) {
     let changeRowVal = coordinate[0];
     let changeColumnVal = coordinate[1];
-    let stoneColor = firstTurn === "white" ? 0 : 1;
 
-    let adjacentarr = [[startRow, startColumn]];
-    let stack = [];
+    let stack = [[startRow, startColumn]];
     let target, x, y;
+
     switch (index) {
       case 0: // 상
         while (startRow !== 0) {
           x = startRow + changeRowVal;
           y = startColumn + changeColumnVal;
           target = this.board[x][y];
-          console.log(`${x}, ${y} : ${target}`);
-          if (target === stoneColor) {
+          if (target === this.currentStoneColor) {
             stack.forEach(val => {
-              this.board[val[0]][val[1]] = stoneColor;
+              this.board[val[0]][val[1]] = this.currentStoneColor;
             });
-            console.log(`뒤집기 완료`);
-            console.log(this.board);
             stack = [];
             break;
           } else if (target === 7) {
             stack = [];
-            console.log("상은 패스됨");
             break;
           } else {
             stack.push([x, y]);
-            console.log(`업데이트 된 스택 : ${stack}`);
           }
           startRow -= 1;
         }
@@ -72,23 +65,18 @@ class Game {
           x = startRow + changeRowVal;
           y = startColumn + changeColumnVal;
           target = this.board[x][y];
-          console.log(`${x}, ${y} : ${target}`);
 
-          if (target === stoneColor) {
+          if (target === this.currentStoneColor) {
             stack.forEach(val => {
-              this.board[val[0]][val[1]] = stoneColor;
+              this.board[val[0]][val[1]] = this.currentStoneColor;
             });
-            console.log(`뒤집기 완료`);
-            console.log(this.board);
             stack = [];
             break;
           } else if (target === 7) {
             stack = [];
-            console.log("하는 패스됨");
             break;
           } else {
             stack.push([x, y]);
-            console.log(`업데이트 된 스택 : ${stack}`);
           }
           startRow += 1;
         }
@@ -99,24 +87,18 @@ class Game {
           x = startRow + changeRowVal;
           y = startColumn + changeColumnVal;
           target = this.board[x][y];
-          console.log(`${x}, ${y} : ${target}`);
 
-          if (target === stoneColor) {
+          if (target === this.currentStoneColor) {
             stack.forEach(val => {
-              this.board[val[0]][val[1]] = stoneColor;
+              this.board[val[0]][val[1]] = this.currentStoneColor;
             });
-            console.log(`뒤집기 완료`);
-            console.log(this.board);
             stack = [];
             break;
           } else if (target === 7) {
             stack = [];
-            console.log("좌는 패스됨");
             break;
           } else {
             stack.push([x, y]);
-            console.log(`업데이트 된 스택 : ${stack}`);
-            console.log(stack);
           }
           startColumn -= 1;
         }
@@ -126,23 +108,20 @@ class Game {
           x = startRow + changeRowVal;
           y = startColumn + changeColumnVal;
           target = this.board[x][y];
-          console.log(`${x}, ${y} : ${target}`);
 
-          if (target === stoneColor) {
+          if (target === this.currentStoneColor) {
             stack.forEach(val => {
-              this.board[val[0]][val[1]] = stoneColor;
+              this.board[val[0]][val[1]] = this.currentStoneColor;
             });
-            console.log(`뒤집기 완료`);
-            console.log(this.board);
+
             stack = [];
             break;
           } else if (target === 7) {
             stack = [];
-            console.log("우는 패스됨");
+
             break;
           } else {
             stack.push([x, y]);
-            console.log(`업데이트 된 스택 : ${stack}`);
           }
           startColumn += 1;
         }
@@ -162,10 +141,8 @@ class Game {
     }
 
     this.allDirection.forEach((coordinate, index) => {
-      this.searchUniqueDirection(row, column, firstTurn, coordinate, index);
+      this.searchUniqueDirection(coordinate, index, row, column);
     });
-
-    this.board[row][column] = this.currentStoneColor;
 
     console.log(this.board);
 
