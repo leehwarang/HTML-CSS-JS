@@ -7,8 +7,8 @@ class Game {
     this.board = Array(8)
       .fill(7)
       .map(x => Array(8).fill(7));
-    this.currentStoneColor;
-    this.currentStoneState = "white";
+    this.currentTurnColor;
+    this.currentTurnStone = "white";
     this.allDirection = [
       [-1, 0], // 상
       [1, 0], // 하
@@ -33,41 +33,43 @@ class Game {
   }
 
   changeTurn() {
-    if (this.currentStoneState === "white") {
-      this.currentStoneState = "black";
-      this.currentStoneColor = 1;
+    if (this.currentTurnStone === "white") {
+      this.currentTurnStone = "black";
+      this.currentTurnColor = 1;
     } else {
-      this.currentStoneState = "white";
-      this.currentStoneColor = 0;
+      this.currentTurnStone = "white";
+      this.currentTurnColor = 0;
     }
+  }
 
-    return this.currentStoneState;
+  setCurrentStoneColor() {
+    this.currentTurnColor = this.currentTurnStone === "white" ? 0 : 1;
   }
 
   checkSamePosition(row, column) {
     return this.board[row][column] === 1 || this.board[row][column] === 0;
   }
 
-  // reverseStone(startRow, changeRowVal, startColumn, changeColumnVal, stack) {
+  // reverseStone(selectedRowVal, changeRowVal, selectedColumnVal, changeColumnVal, stack) {
   // }
 
-  searchUniqueDirection(coordinate, index, startRow, startColumn) {
+  searchUniqueDirection(coordinate, index, selectedRowVal, selectedColumnVal) {
     let changeRowVal = coordinate[0];
     let changeColumnVal = coordinate[1];
 
-    let stack = [[startRow, startColumn]];
+    let stack = [[selectedRowVal, selectedColumnVal]];
     let x, y, target;
 
     switch (index) {
       case 0: // 상
-        while (startRow !== 0) {
-          x = startRow + changeRowVal;
-          y = startColumn + changeColumnVal;
+        while (selectedRowVal !== 0) {
+          x = selectedRowVal + changeRowVal;
+          y = selectedColumnVal + changeColumnVal;
           target = this.board[x][y];
 
-          if (target === this.currentStoneColor) {
+          if (target === this.currentTurnColor) {
             stack.forEach(val => {
-              this.board[val[0]][val[1]] = this.currentStoneColor;
+              this.board[val[0]][val[1]] = this.currentTurnColor;
             });
             stack = [];
             break;
@@ -77,19 +79,19 @@ class Game {
           } else {
             stack.push([x, y]);
           }
-          startRow -= 1;
+          selectedRowVal -= 1;
         }
         break;
 
       case 1: // 하
-        while (startRow !== 7) {
-          x = startRow + changeRowVal;
-          y = startColumn + changeColumnVal;
+        while (selectedRowVal !== 7) {
+          x = selectedRowVal + changeRowVal;
+          y = selectedColumnVal + changeColumnVal;
           target = this.board[x][y];
 
-          if (target === this.currentStoneColor) {
+          if (target === this.currentTurnColor) {
             stack.forEach(val => {
-              this.board[val[0]][val[1]] = this.currentStoneColor;
+              this.board[val[0]][val[1]] = this.currentTurnColor;
             });
             stack = [];
             break;
@@ -99,19 +101,19 @@ class Game {
           } else {
             stack.push([x, y]);
           }
-          startRow += 1;
+          selectedRowVal += 1;
         }
         break;
 
       case 2: // 좌
-        while (startColumn !== 0) {
-          x = startRow + changeRowVal;
-          y = startColumn + changeColumnVal;
+        while (selectedColumnVal !== 0) {
+          x = selectedRowVal + changeRowVal;
+          y = selectedColumnVal + changeColumnVal;
           target = this.board[x][y];
 
-          if (target === this.currentStoneColor) {
+          if (target === this.currentTurnColor) {
             stack.forEach(val => {
-              this.board[val[0]][val[1]] = this.currentStoneColor;
+              this.board[val[0]][val[1]] = this.currentTurnColor;
             });
             stack = [];
             break;
@@ -121,18 +123,18 @@ class Game {
           } else {
             stack.push([x, y]);
           }
-          startColumn -= 1;
+          selectedColumnVal -= 1;
         }
 
       case 3: // 우
-        while (startColumn !== 7) {
-          x = startRow + changeRowVal;
-          y = startColumn + changeColumnVal;
+        while (selectedColumnVal !== 7) {
+          x = selectedRowVal + changeRowVal;
+          y = selectedColumnVal + changeColumnVal;
           target = this.board[x][y];
 
-          if (target === this.currentStoneColor) {
+          if (target === this.currentTurnColor) {
             stack.forEach(val => {
-              this.board[val[0]][val[1]] = this.currentStoneColor;
+              this.board[val[0]][val[1]] = this.currentTurnColor;
             });
 
             stack = [];
@@ -144,21 +146,22 @@ class Game {
           } else {
             stack.push([x, y]);
           }
-          startColumn += 1;
+
+          selectedColumnVal += 1;
         }
         break;
 
       case 4: // 오른쪽 대각선 위 [-1, 1]
         console.log("오른쪽 대각선 위를 처리를 하나요?");
-        while (startRow !== 0 || startColumn !== 7) {
-          x = startRow + changeRowVal;
-          y = startColumn + changeColumnVal;
+        while (selectedRowVal !== 0 || selectedColumnVal !== 7) {
+          x = selectedRowVal + changeRowVal;
+          y = selectedColumnVal + changeColumnVal;
           target = this.board[x][y];
           console.log(`x좌표 : ${x}, y좌표 : ${y} / target : ${target}`);
 
-          if (target === this.currentStoneColor) {
+          if (target === this.currentTurnColor) {
             stack.forEach(val => {
-              this.board[val[0]][val[1]] = this.currentStoneColor;
+              this.board[val[0]][val[1]] = this.currentTurnColor;
             });
 
             stack = [];
@@ -171,22 +174,22 @@ class Game {
             stack.push([x, y]);
             console.log(stack);
           }
-          startRow -= 1;
-          startColumn += 1;
+          selectedRowVal -= 1;
+          selectedColumnVal += 1;
         }
         break;
 
       case 5: // 오른쪽 대각선 아래 [1, 1]
         console.log("오른쪽 대각선 아래를 처리를 하나요?");
-        while (startRow !== 7 || startColumn !== 7) {
-          x = startRow + changeRowVal;
-          y = startColumn + changeColumnVal;
+        while (selectedRowVal !== 7 || selectedColumnVal !== 7) {
+          x = selectedRowVal + changeRowVal;
+          y = selectedColumnVal + changeColumnVal;
           target = this.board[x][y];
           console.log(`x좌표 : ${x}, y좌표 : ${y} / target : ${target}`);
 
-          if (target === this.currentStoneColor) {
+          if (target === this.currentTurnColor) {
             stack.forEach(val => {
-              this.board[val[0]][val[1]] = this.currentStoneColor;
+              this.board[val[0]][val[1]] = this.currentTurnColor;
             });
 
             stack = [];
@@ -199,22 +202,22 @@ class Game {
             stack.push([x, y]);
             console.log(stack);
           }
-          startRow += 1;
-          startColumn += 1;
+          selectedRowVal += 1;
+          selectedColumnVal += 1;
         }
         break;
 
       case 6: // 왼쪽 대각선 위 [-1, -1]
         console.log("왼쪽 대각선 위를 처리 하나요?");
-        while (startRow !== 0 || startColumn !== 0) {
-          x = startRow + changeRowVal;
-          y = startColumn + changeColumnVal;
+        while (selectedRowVal !== 0 || selectedColumnVal !== 0) {
+          x = selectedRowVal + changeRowVal;
+          y = selectedColumnVal + changeColumnVal;
           target = this.board[x][y];
           console.log(`x좌표 : ${x}, y좌표 : ${y} / target : ${target}`);
 
-          if (target === this.currentStoneColor) {
+          if (target === this.currentTurnColor) {
             stack.forEach(val => {
-              this.board[val[0]][val[1]] = this.currentStoneColor;
+              this.board[val[0]][val[1]] = this.currentTurnColor;
             });
 
             stack = [];
@@ -227,22 +230,22 @@ class Game {
             stack.push([x, y]);
             console.log(stack);
           }
-          startRow -= 1;
-          startColumn -= 1;
+          selectedRowVal -= 1;
+          selectedColumnVal -= 1;
         }
         break;
 
       case 7: // 왼쪽 대각선 아래 [1, -1]
         console.log("왼쪽 대각선 아래를 처리 하나요?");
-        while (startRow !== 7 || startColumn !== 0) {
-          x = startRow + changeRowVal;
-          y = startColumn + changeColumnVal;
+        while (selectedRowVal !== 7 || selectedColumnVal !== 0) {
+          x = selectedRowVal + changeRowVal;
+          y = selectedColumnVal + changeColumnVal;
           target = this.board[x][y];
           console.log(`x좌표 : ${x}, y좌표 : ${y} / target : ${target}`);
 
-          if (target === this.currentStoneColor) {
+          if (target === this.currentTurnColor) {
             stack.forEach(val => {
-              this.board[val[0]][val[1]] = this.currentStoneColor;
+              this.board[val[0]][val[1]] = this.currentTurnColor;
             });
 
             stack = [];
@@ -255,8 +258,8 @@ class Game {
             stack.push([x, y]);
             console.log(stack);
           }
-          startRow += 1;
-          startColumn -= 1;
+          selectedRowVal += 1;
+          selectedColumnVal -= 1;
         }
         break;
 
@@ -266,15 +269,17 @@ class Game {
   }
 
   updateBoard(row, column) {
-    this.currentStoneColor = this.currentStoneState === "white" ? 0 : 1;
+    this.setCurrentStoneColor();
 
     if (this.checkSamePosition(row, column)) {
       console.log("이미 돌이 놓여져 있는 자리 입니다.");
-      return this.currentStoneState;
+      return;
     }
 
     this.allDirection.forEach((coordinate, index) => {
       this.searchUniqueDirection(coordinate, index, row, column);
+      // searchUniqueDirection 했을 시에, 하나의 탐색이라도 성공했다면 게임을 그대로 진행
+      // 하나의 탐색이라도 하지 못했다면 현재 Turn 에게 다시 입력을 받아야함
     });
 
     this.printBoard();
