@@ -50,8 +50,15 @@ class Game {
     return this.board[row][column] === 1 || this.board[row][column] === 0;
   }
 
-  // reverseStone(selectedRowVal, changeRowVal, selectedColumnVal, changeColumnVal, stack) {
-  // }
+  updateCoordinate() {
+    return [];
+  }
+
+  reverseStone(stack) {
+    stack.forEach(val => {
+      this.board[val[0]][val[1]] = this.currentTurnColor;
+    });
+  }
 
   searchUniqueDirection(coordinate, index, selectedRowVal, selectedColumnVal) {
     let changeRowVal = coordinate[0];
@@ -61,205 +68,161 @@ class Game {
     let x, y, target;
 
     switch (index) {
-      case 0: // 상
+      case 0: // 상  [-1, 0]
         while (selectedRowVal !== 0) {
           x = selectedRowVal + changeRowVal;
           y = selectedColumnVal + changeColumnVal;
           target = this.board[x][y];
 
           if (target === this.currentTurnColor) {
-            stack.forEach(val => {
-              this.board[val[0]][val[1]] = this.currentTurnColor;
-            });
-            stack = [];
+            this.reverseStone(stack);
             break;
           } else if (target === 7) {
-            stack = [];
             break;
           } else {
             stack.push([x, y]);
           }
-          selectedRowVal -= 1;
+
+          selectedRowVal += changeRowVal;
+          selectedColumnVal += changeColumnVal;
         }
         break;
 
-      case 1: // 하
+      case 1: // 하  [1, 0]
         while (selectedRowVal !== 7) {
           x = selectedRowVal + changeRowVal;
           y = selectedColumnVal + changeColumnVal;
           target = this.board[x][y];
 
           if (target === this.currentTurnColor) {
-            stack.forEach(val => {
-              this.board[val[0]][val[1]] = this.currentTurnColor;
-            });
-            stack = [];
+            this.reverseStone(stack);
             break;
           } else if (target === 7) {
-            stack = [];
             break;
           } else {
             stack.push([x, y]);
           }
-          selectedRowVal += 1;
+
+          selectedRowVal += changeRowVal;
+          selectedColumnVal += changeColumnVal;
         }
         break;
 
-      case 2: // 좌
+      case 2: // 좌  [0, -1]
         while (selectedColumnVal !== 0) {
           x = selectedRowVal + changeRowVal;
           y = selectedColumnVal + changeColumnVal;
           target = this.board[x][y];
 
           if (target === this.currentTurnColor) {
-            stack.forEach(val => {
-              this.board[val[0]][val[1]] = this.currentTurnColor;
-            });
-            stack = [];
+            this.reverseStone(stack);
             break;
           } else if (target === 7) {
-            stack = [];
             break;
           } else {
             stack.push([x, y]);
           }
-          selectedColumnVal -= 1;
+
+          selectedRowVal += changeRowVal;
+          selectedColumnVal += changeColumnVal;
         }
 
-      case 3: // 우
+      case 3: // 우  [0, 1]
         while (selectedColumnVal !== 7) {
           x = selectedRowVal + changeRowVal;
           y = selectedColumnVal + changeColumnVal;
           target = this.board[x][y];
 
           if (target === this.currentTurnColor) {
-            stack.forEach(val => {
-              this.board[val[0]][val[1]] = this.currentTurnColor;
-            });
-
-            stack = [];
+            this.reverseStone(stack);
             break;
           } else if (target === 7) {
-            stack = [];
-
             break;
           } else {
             stack.push([x, y]);
           }
 
-          selectedColumnVal += 1;
+          selectedRowVal += changeRowVal;
+          selectedColumnVal += changeColumnVal;
         }
         break;
 
       case 4: // 오른쪽 대각선 위 [-1, 1]
-        console.log("오른쪽 대각선 위를 처리를 하나요?");
         while (selectedRowVal !== 0 || selectedColumnVal !== 7) {
           x = selectedRowVal + changeRowVal;
           y = selectedColumnVal + changeColumnVal;
           target = this.board[x][y];
-          console.log(`x좌표 : ${x}, y좌표 : ${y} / target : ${target}`);
 
           if (target === this.currentTurnColor) {
-            stack.forEach(val => {
-              this.board[val[0]][val[1]] = this.currentTurnColor;
-            });
-
-            stack = [];
+            this.reverseStone(stack);
             break;
           } else if (target === 7) {
-            stack = [];
-
             break;
           } else {
             stack.push([x, y]);
-            console.log(stack);
           }
-          selectedRowVal -= 1;
-          selectedColumnVal += 1;
+
+          selectedRowVal += changeRowVal;
+          selectedColumnVal += changeColumnVal;
         }
         break;
 
       case 5: // 오른쪽 대각선 아래 [1, 1]
-        console.log("오른쪽 대각선 아래를 처리를 하나요?");
         while (selectedRowVal !== 7 || selectedColumnVal !== 7) {
           x = selectedRowVal + changeRowVal;
           y = selectedColumnVal + changeColumnVal;
           target = this.board[x][y];
-          console.log(`x좌표 : ${x}, y좌표 : ${y} / target : ${target}`);
 
           if (target === this.currentTurnColor) {
-            stack.forEach(val => {
-              this.board[val[0]][val[1]] = this.currentTurnColor;
-            });
-
-            stack = [];
+            this.reverseStone(stack);
             break;
           } else if (target === 7) {
-            stack = [];
-
             break;
           } else {
             stack.push([x, y]);
-            console.log(stack);
           }
-          selectedRowVal += 1;
-          selectedColumnVal += 1;
+
+          selectedRowVal += changeRowVal;
+          selectedColumnVal += changeColumnVal;
         }
         break;
 
       case 6: // 왼쪽 대각선 위 [-1, -1]
-        console.log("왼쪽 대각선 위를 처리 하나요?");
         while (selectedRowVal !== 0 || selectedColumnVal !== 0) {
           x = selectedRowVal + changeRowVal;
           y = selectedColumnVal + changeColumnVal;
           target = this.board[x][y];
-          console.log(`x좌표 : ${x}, y좌표 : ${y} / target : ${target}`);
 
           if (target === this.currentTurnColor) {
-            stack.forEach(val => {
-              this.board[val[0]][val[1]] = this.currentTurnColor;
-            });
-
-            stack = [];
+            this.reverseStone(stack);
             break;
           } else if (target === 7) {
-            stack = [];
-
             break;
           } else {
             stack.push([x, y]);
-            console.log(stack);
           }
-          selectedRowVal -= 1;
-          selectedColumnVal -= 1;
+
+          selectedRowVal += changeRowVal;
+          selectedColumnVal += changeColumnVal;
         }
         break;
 
       case 7: // 왼쪽 대각선 아래 [1, -1]
-        console.log("왼쪽 대각선 아래를 처리 하나요?");
         while (selectedRowVal !== 7 || selectedColumnVal !== 0) {
           x = selectedRowVal + changeRowVal;
           y = selectedColumnVal + changeColumnVal;
           target = this.board[x][y];
-          console.log(`x좌표 : ${x}, y좌표 : ${y} / target : ${target}`);
 
           if (target === this.currentTurnColor) {
-            stack.forEach(val => {
-              this.board[val[0]][val[1]] = this.currentTurnColor;
-            });
-
-            stack = [];
+            this.reverseStone(stack);
             break;
           } else if (target === 7) {
-            stack = [];
-
             break;
           } else {
             stack.push([x, y]);
-            console.log(stack);
           }
-          selectedRowVal += 1;
-          selectedColumnVal -= 1;
+          selectedRowVal += changeRowVal;
+          selectedColumnVal += changeColumnVal;
         }
         break;
 
