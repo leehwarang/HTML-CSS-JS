@@ -50,8 +50,16 @@ class Game {
     return this.board[row][column] === 1 || this.board[row][column] === 0;
   }
 
-  updateCoordinate() {
-    return [];
+  calculateCoordinate(
+    selectedRowVal,
+    changeRowVal,
+    selectedColumnVal,
+    changeColumnVal
+  ) {
+    let x = selectedRowVal + changeRowVal;
+    let y = selectedColumnVal + changeColumnVal;
+    let target = this.board[x][y];
+    return target;
   }
 
   reverseStone(stack) {
@@ -59,6 +67,22 @@ class Game {
       this.board[val[0]][val[1]] = this.currentTurnColor;
     });
   }
+
+  // judgeTarget(target, stack) {
+  //   if (target === this.currentTurnColor) {
+  //     this.reverseStone(stack);
+  //     // break;
+  //   } else if (target === 7) {
+  //     // break;
+  //     return;
+  //   } else {
+  //     stack.push([x, y]);
+  //     return stack;
+  //   }
+  // }
+
+  // 위 두가지 경우에 break 시켰다면 호출한 부분에서의 while문을 빠져 나가야함
+  // 제일 아래의 경우만 return stack하여 while 문이 계속 작동하도록 해야함
 
   searchUniqueDirection(coordinate, index, selectedRowVal, selectedColumnVal) {
     let changeRowVal = coordinate[0];
@@ -70,9 +94,9 @@ class Game {
     switch (index) {
       case 0: // 상  [-1, 0]
         while (selectedRowVal !== 0) {
-          x = selectedRowVal + changeRowVal;
-          y = selectedColumnVal + changeColumnVal;
-          target = this.board[x][y];
+          selectedRowVal += changeRowVal;
+          selectedColumnVal += changeColumnVal;
+          target = this.board[selectedRowVal][selectedColumnVal];
 
           if (target === this.currentTurnColor) {
             this.reverseStone(stack);
@@ -80,19 +104,16 @@ class Game {
           } else if (target === 7) {
             break;
           } else {
-            stack.push([x, y]);
+            stack.push([selectedRowVal, selectedColumnVal]);
           }
-
-          selectedRowVal += changeRowVal;
-          selectedColumnVal += changeColumnVal;
         }
         break;
 
       case 1: // 하  [1, 0]
         while (selectedRowVal !== 7) {
-          x = selectedRowVal + changeRowVal;
-          y = selectedColumnVal + changeColumnVal;
-          target = this.board[x][y];
+          selectedRowVal += changeRowVal;
+          selectedColumnVal += changeColumnVal;
+          target = this.board[selectedRowVal][selectedColumnVal];
 
           if (target === this.currentTurnColor) {
             this.reverseStone(stack);
@@ -100,19 +121,16 @@ class Game {
           } else if (target === 7) {
             break;
           } else {
-            stack.push([x, y]);
+            stack.push([selectedRowVal, selectedColumnVal]);
           }
-
-          selectedRowVal += changeRowVal;
-          selectedColumnVal += changeColumnVal;
         }
         break;
 
       case 2: // 좌  [0, -1]
         while (selectedColumnVal !== 0) {
-          x = selectedRowVal + changeRowVal;
-          y = selectedColumnVal + changeColumnVal;
-          target = this.board[x][y];
+          selectedRowVal += changeRowVal;
+          selectedColumnVal += changeColumnVal;
+          target = this.board[selectedRowVal][selectedColumnVal];
 
           if (target === this.currentTurnColor) {
             this.reverseStone(stack);
@@ -120,18 +138,15 @@ class Game {
           } else if (target === 7) {
             break;
           } else {
-            stack.push([x, y]);
+            stack.push([selectedRowVal, selectedColumnVal]);
           }
-
-          selectedRowVal += changeRowVal;
-          selectedColumnVal += changeColumnVal;
         }
 
       case 3: // 우  [0, 1]
         while (selectedColumnVal !== 7) {
-          x = selectedRowVal + changeRowVal;
-          y = selectedColumnVal + changeColumnVal;
-          target = this.board[x][y];
+          selectedRowVal += changeRowVal;
+          selectedColumnVal += changeColumnVal;
+          target = this.board[selectedRowVal][selectedColumnVal];
 
           if (target === this.currentTurnColor) {
             this.reverseStone(stack);
@@ -139,19 +154,16 @@ class Game {
           } else if (target === 7) {
             break;
           } else {
-            stack.push([x, y]);
+            stack.push([selectedRowVal, selectedColumnVal]);
           }
-
-          selectedRowVal += changeRowVal;
-          selectedColumnVal += changeColumnVal;
         }
         break;
 
       case 4: // 오른쪽 대각선 위 [-1, 1]
         while (selectedRowVal !== 0 || selectedColumnVal !== 7) {
-          x = selectedRowVal + changeRowVal;
-          y = selectedColumnVal + changeColumnVal;
-          target = this.board[x][y];
+          selectedRowVal += changeRowVal;
+          selectedColumnVal += changeColumnVal;
+          target = this.board[selectedRowVal][selectedColumnVal];
 
           if (target === this.currentTurnColor) {
             this.reverseStone(stack);
@@ -159,19 +171,16 @@ class Game {
           } else if (target === 7) {
             break;
           } else {
-            stack.push([x, y]);
+            stack.push([selectedRowVal, selectedColumnVal]);
           }
-
-          selectedRowVal += changeRowVal;
-          selectedColumnVal += changeColumnVal;
         }
         break;
 
       case 5: // 오른쪽 대각선 아래 [1, 1]
         while (selectedRowVal !== 7 || selectedColumnVal !== 7) {
-          x = selectedRowVal + changeRowVal;
-          y = selectedColumnVal + changeColumnVal;
-          target = this.board[x][y];
+          selectedRowVal += changeRowVal;
+          selectedColumnVal += changeColumnVal;
+          target = this.board[selectedRowVal][selectedColumnVal];
 
           if (target === this.currentTurnColor) {
             this.reverseStone(stack);
@@ -179,19 +188,16 @@ class Game {
           } else if (target === 7) {
             break;
           } else {
-            stack.push([x, y]);
+            stack.push([selectedRowVal, selectedColumnVal]);
           }
-
-          selectedRowVal += changeRowVal;
-          selectedColumnVal += changeColumnVal;
         }
         break;
 
       case 6: // 왼쪽 대각선 위 [-1, -1]
         while (selectedRowVal !== 0 || selectedColumnVal !== 0) {
-          x = selectedRowVal + changeRowVal;
-          y = selectedColumnVal + changeColumnVal;
-          target = this.board[x][y];
+          selectedRowVal += changeRowVal;
+          selectedColumnVal += changeColumnVal;
+          target = this.board[selectedRowVal][selectedColumnVal];
 
           if (target === this.currentTurnColor) {
             this.reverseStone(stack);
@@ -199,19 +205,16 @@ class Game {
           } else if (target === 7) {
             break;
           } else {
-            stack.push([x, y]);
+            stack.push([selectedRowVal, selectedColumnVal]);
           }
-
-          selectedRowVal += changeRowVal;
-          selectedColumnVal += changeColumnVal;
         }
         break;
 
       case 7: // 왼쪽 대각선 아래 [1, -1]
         while (selectedRowVal !== 7 || selectedColumnVal !== 0) {
-          x = selectedRowVal + changeRowVal;
-          y = selectedColumnVal + changeColumnVal;
-          target = this.board[x][y];
+          selectedRowVal += changeRowVal;
+          selectedColumnVal += changeColumnVal;
+          target = this.board[selectedRowVal][selectedColumnVal];
 
           if (target === this.currentTurnColor) {
             this.reverseStone(stack);
@@ -219,10 +222,8 @@ class Game {
           } else if (target === 7) {
             break;
           } else {
-            stack.push([x, y]);
+            stack.push([selectedRowVal, selectedColumnVal]);
           }
-          selectedRowVal += changeRowVal;
-          selectedColumnVal += changeColumnVal;
         }
         break;
 
