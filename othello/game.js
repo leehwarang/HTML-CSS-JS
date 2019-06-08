@@ -1,5 +1,3 @@
-const inputPrompt = require("./command");
-
 class Game {
   constructor() {
     this.black = new Black(); // 흑돌이 1
@@ -50,16 +48,8 @@ class Game {
     return this.board[row][column] === 1 || this.board[row][column] === 0;
   }
 
-  calculateCoordinate(
-    selectedRowVal,
-    changeRowVal,
-    selectedColumnVal,
-    changeColumnVal
-  ) {
-    let x = selectedRowVal + changeRowVal;
-    let y = selectedColumnVal + changeColumnVal;
-    let target = this.board[x][y];
-    return target;
+  checkPossiblePosition(successArr) {
+    return successArr.includes(true);
   }
 
   reverseStone(stack) {
@@ -67,6 +57,19 @@ class Game {
       this.board[val[0]][val[1]] = this.currentTurnColor;
     });
   }
+
+  // <--추가하면 error 나는 함수들-->
+  // calculateCoordinate(
+  //   selectedRowVal,
+  //   changeRowVal,
+  //   selectedColumnVal,
+  //   changeColumnVal
+  // ) {
+  //   selectedRowVal += changeRowVal;
+  //   selectedColumnVal += changeColumnVal;
+  //   let target = this.board[selectedRowVal][selectedColumnVal];
+  //   return target;
+  // }
 
   // judgeTarget(target, stack) {
   //   if (target === this.currentTurnColor) {
@@ -81,15 +84,13 @@ class Game {
   //   }
   // }
 
-  // 위 두가지 경우에 break 시켰다면 호출한 부분에서의 while문을 빠져 나가야함
-  // 제일 아래의 경우만 return stack하여 while 문이 계속 작동하도록 해야함
-
   searchUniqueDirection(coordinate, index, selectedRowVal, selectedColumnVal) {
     let changeRowVal = coordinate[0];
     let changeColumnVal = coordinate[1];
 
     let stack = [[selectedRowVal, selectedColumnVal]];
-    let x, y, target;
+    let target;
+    let success = false;
 
     switch (index) {
       case 0: // 상  [-1, 0]
@@ -99,6 +100,9 @@ class Game {
           target = this.board[selectedRowVal][selectedColumnVal];
 
           if (target === this.currentTurnColor) {
+            if (stack.length > 1) {
+              success = true;
+            }
             this.reverseStone(stack);
             break;
           } else if (target === 7) {
@@ -116,6 +120,9 @@ class Game {
           target = this.board[selectedRowVal][selectedColumnVal];
 
           if (target === this.currentTurnColor) {
+            if (stack.length > 1) {
+              success = true;
+            }
             this.reverseStone(stack);
             break;
           } else if (target === 7) {
@@ -133,6 +140,9 @@ class Game {
           target = this.board[selectedRowVal][selectedColumnVal];
 
           if (target === this.currentTurnColor) {
+            if (stack.length > 1) {
+              success = true;
+            }
             this.reverseStone(stack);
             break;
           } else if (target === 7) {
@@ -149,6 +159,9 @@ class Game {
           target = this.board[selectedRowVal][selectedColumnVal];
 
           if (target === this.currentTurnColor) {
+            if (stack.length > 1) {
+              success = true;
+            }
             this.reverseStone(stack);
             break;
           } else if (target === 7) {
@@ -166,6 +179,9 @@ class Game {
           target = this.board[selectedRowVal][selectedColumnVal];
 
           if (target === this.currentTurnColor) {
+            if (stack.length > 1) {
+              success = true;
+            }
             this.reverseStone(stack);
             break;
           } else if (target === 7) {
@@ -183,6 +199,9 @@ class Game {
           target = this.board[selectedRowVal][selectedColumnVal];
 
           if (target === this.currentTurnColor) {
+            if (stack.length > 1) {
+              success = true;
+            }
             this.reverseStone(stack);
             break;
           } else if (target === 7) {
@@ -200,6 +219,9 @@ class Game {
           target = this.board[selectedRowVal][selectedColumnVal];
 
           if (target === this.currentTurnColor) {
+            if (stack.length > 1) {
+              success = true;
+            }
             this.reverseStone(stack);
             break;
           } else if (target === 7) {
@@ -217,6 +239,9 @@ class Game {
           target = this.board[selectedRowVal][selectedColumnVal];
 
           if (target === this.currentTurnColor) {
+            if (stack.length > 1) {
+              success = true;
+            }
             this.reverseStone(stack);
             break;
           } else if (target === 7) {
@@ -230,9 +255,12 @@ class Game {
       default:
         break;
     }
+
+    return success;
   }
 
   updateBoard(row, column) {
+    let successArr = [];
     this.setCurrentStoneColor();
 
     if (this.checkSamePosition(row, column)) {
@@ -241,14 +269,17 @@ class Game {
     }
 
     this.allDirection.forEach((coordinate, index) => {
-      this.searchUniqueDirection(coordinate, index, row, column);
-      // searchUniqueDirection 했을 시에, 하나의 탐색이라도 성공했다면 게임을 그대로 진행
-      // 하나의 탐색이라도 하지 못했다면 현재 Turn 에게 다시 입력을 받아야함
+      let result = this.searchUniqueDirection(coordinate, index, row, column);
+      successArr.push(result);
     });
 
-    this.printBoard();
-
-    this.changeTurn();
+    if (this.checkPossiblePosition(successArr)) {
+      this.printBoard();
+      this.changeTurn();
+    } else {
+      console.log("돌을 놓을 수 없는 자리 입니다.");
+      return;
+    }
   }
 }
 
