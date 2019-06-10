@@ -58,32 +58,6 @@ class Game {
     });
   }
 
-  // <--추가하면 error 나는 함수들-->
-  // calculateCoordinate(
-  //   selectedRowVal,
-  //   changeRowVal,
-  //   selectedColumnVal,
-  //   changeColumnVal
-  // ) {
-  //   selectedRowVal += changeRowVal;
-  //   selectedColumnVal += changeColumnVal;
-  //   let target = this.board[selectedRowVal][selectedColumnVal];
-  //   return target;
-  // }
-
-  // judgeTarget(target, stack) {
-  //   if (target === this.currentTurnColor) {
-  //     this.reverseStone(stack);
-  //     // break;
-  //   } else if (target === 7) {
-  //     // break;
-  //     return;
-  //   } else {
-  //     stack.push([x, y]);
-  //     return stack;
-  //   }
-  // }
-
   searchUniqueDirection(coordinate, index, selectedRowVal, selectedColumnVal) {
     let changeRowVal = coordinate[0];
     let changeColumnVal = coordinate[1];
@@ -92,168 +66,33 @@ class Game {
     let target;
     let success = false;
 
-    switch (index) {
-      case 0: // 상  [-1, 0]
-        while (selectedRowVal !== 0) {
-          selectedRowVal += changeRowVal;
-          selectedColumnVal += changeColumnVal;
-          target = this.board[selectedRowVal][selectedColumnVal];
+    const map = {
+      0: () => selectedRowVal !== 0, // 상  [-1, 0]
+      1: () => selectedRowVal !== 7, // 하  [1, 0]
+      2: () => selectedColumnVal !== 0, // 좌  [0, -1]
+      3: () => selectedColumnVal !== 7, // 우  [0, 1]
+      4: () => selectedRowVal !== 0 || selectedColumnVal !== 7, // 오른쪽 대각선 위 [-1, 1]
+      5: () => selectedRowVal !== 7 || selectedColumnVal !== 7, // 오른쪽 대각선 아래 [1, 1]
+      6: () => selectedRowVal !== 0 || selectedColumnVal !== 0, // 왼쪽 대각선 위 [-1, -1]
+      7: () => selectedRowVal !== 7 || selectedColumnVal !== 0 // 왼쪽 대각선 아래 [1, -1]
+    };
 
-          if (target === this.currentTurnColor) {
-            if (stack.length > 1) {
-              success = true;
-            }
-            this.reverseStone(stack);
-            break;
-          } else if (target === 7) {
-            break;
-          } else {
-            stack.push([selectedRowVal, selectedColumnVal]);
-          }
+    while (map[index]()) {
+      selectedRowVal += changeRowVal;
+      selectedColumnVal += changeColumnVal;
+      target = this.board[selectedRowVal][selectedColumnVal];
+
+      if (target === this.currentTurnColor) {
+        if (stack.length > 1) {
+          success = true;
         }
+        this.reverseStone(stack);
         break;
-
-      case 1: // 하  [1, 0]
-        while (selectedRowVal !== 7) {
-          selectedRowVal += changeRowVal;
-          selectedColumnVal += changeColumnVal;
-          target = this.board[selectedRowVal][selectedColumnVal];
-
-          if (target === this.currentTurnColor) {
-            if (stack.length > 1) {
-              success = true;
-            }
-            this.reverseStone(stack);
-            break;
-          } else if (target === 7) {
-            break;
-          } else {
-            stack.push([selectedRowVal, selectedColumnVal]);
-          }
-        }
+      } else if (target === 7) {
         break;
-
-      case 2: // 좌  [0, -1]
-        while (selectedColumnVal !== 0) {
-          selectedRowVal += changeRowVal;
-          selectedColumnVal += changeColumnVal;
-          target = this.board[selectedRowVal][selectedColumnVal];
-
-          if (target === this.currentTurnColor) {
-            if (stack.length > 1) {
-              success = true;
-            }
-            this.reverseStone(stack);
-            break;
-          } else if (target === 7) {
-            break;
-          } else {
-            stack.push([selectedRowVal, selectedColumnVal]);
-          }
-        }
-
-      case 3: // 우  [0, 1]
-        while (selectedColumnVal !== 7) {
-          selectedRowVal += changeRowVal;
-          selectedColumnVal += changeColumnVal;
-          target = this.board[selectedRowVal][selectedColumnVal];
-
-          if (target === this.currentTurnColor) {
-            if (stack.length > 1) {
-              success = true;
-            }
-            this.reverseStone(stack);
-            break;
-          } else if (target === 7) {
-            break;
-          } else {
-            stack.push([selectedRowVal, selectedColumnVal]);
-          }
-        }
-        break;
-
-      case 4: // 오른쪽 대각선 위 [-1, 1]
-        while (selectedRowVal !== 0 || selectedColumnVal !== 7) {
-          selectedRowVal += changeRowVal;
-          selectedColumnVal += changeColumnVal;
-          target = this.board[selectedRowVal][selectedColumnVal];
-
-          if (target === this.currentTurnColor) {
-            if (stack.length > 1) {
-              success = true;
-            }
-            this.reverseStone(stack);
-            break;
-          } else if (target === 7) {
-            break;
-          } else {
-            stack.push([selectedRowVal, selectedColumnVal]);
-          }
-        }
-        break;
-
-      case 5: // 오른쪽 대각선 아래 [1, 1]
-        while (selectedRowVal !== 7 || selectedColumnVal !== 7) {
-          selectedRowVal += changeRowVal;
-          selectedColumnVal += changeColumnVal;
-          target = this.board[selectedRowVal][selectedColumnVal];
-
-          if (target === this.currentTurnColor) {
-            if (stack.length > 1) {
-              success = true;
-            }
-            this.reverseStone(stack);
-            break;
-          } else if (target === 7) {
-            break;
-          } else {
-            stack.push([selectedRowVal, selectedColumnVal]);
-          }
-        }
-        break;
-
-      case 6: // 왼쪽 대각선 위 [-1, -1]
-        while (selectedRowVal !== 0 || selectedColumnVal !== 0) {
-          selectedRowVal += changeRowVal;
-          selectedColumnVal += changeColumnVal;
-          target = this.board[selectedRowVal][selectedColumnVal];
-
-          if (target === this.currentTurnColor) {
-            if (stack.length > 1) {
-              success = true;
-            }
-            this.reverseStone(stack);
-            break;
-          } else if (target === 7) {
-            break;
-          } else {
-            stack.push([selectedRowVal, selectedColumnVal]);
-          }
-        }
-        break;
-
-      case 7: // 왼쪽 대각선 아래 [1, -1]
-        while (selectedRowVal !== 7 || selectedColumnVal !== 0) {
-          selectedRowVal += changeRowVal;
-          selectedColumnVal += changeColumnVal;
-          target = this.board[selectedRowVal][selectedColumnVal];
-
-          if (target === this.currentTurnColor) {
-            if (stack.length > 1) {
-              success = true;
-            }
-            this.reverseStone(stack);
-            break;
-          } else if (target === 7) {
-            break;
-          } else {
-            stack.push([selectedRowVal, selectedColumnVal]);
-          }
-        }
-        break;
-
-      default:
-        break;
+      } else {
+        stack.push([selectedRowVal, selectedColumnVal]);
+      }
     }
 
     return success;
