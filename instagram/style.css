@@ -1,150 +1,11 @@
-html,
-body,
-div,
-span,
-applet,
-object,
-iframe,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-p,
-blockquote,
-pre,
-a,
-abbr,
-acronym,
-address,
-big,
-cite,
-code,
-del,
-dfn,
-em,
-img,
-ins,
-kbd,
-q,
-s,
-samp,
-small,
-strike,
-strong,
-sub,
-sup,
-tt,
-var,
-b,
-u,
-i,
-center,
-dl,
-dt,
-dd,
-ol,
-ul,
-li,
-fieldset,
-form,
-label,
-legend,
-table,
-caption,
-tbody,
-tfoot,
-thead,
-tr,
-th,
-td,
-article,
-aside,
-canvas,
-details,
-embed,
-figure,
-figcaption,
-footer,
-header,
-hgroup,
-menu,
-nav,
-output,
-ruby,
-section,
-summary,
-time,
-mark,
-audio,
-video {
-  margin: 0;
-  padding: 0;
-  border: 0;
-  font-size: 100%;
-  font: inherit;
-  vertical-align: baseline;
-}
-/* HTML5 display-role reset for older browsers */
-article,
-aside,
-details,
-figcaption,
-figure,
-footer,
-header,
-hgroup,
-menu,
-nav,
-section {
-  display: block;
-}
 body {
-  line-height: 1;
+  background-color: #fafafa;
 }
-ol,
-ul {
-  list-style: none;
-}
-blockquote,
-q {
-  quotes: none;
-}
-blockquote:before,
-blockquote:after,
-q:before,
-q:after {
-  content: "";
-  content: none;
-}
-table {
-  border-collapse: collapse;
-  border-spacing: 0;
-}
-
-*,
-html {
-  box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-}
-*,
-*:before,
-*:after {
-  box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-}
-
-/* 여기서부터 시작 */
 
 .header-wrap {
   width: 100%;
   height: 77px;
   border-bottom: 1px solid #e6e6e6;
-  padding: 0;
-  margin: 0;
   background-color: white;
   position: sticky;
   top: 0;
@@ -154,7 +15,8 @@ html {
 }
 
 .header {
-  width: 1010px;
+  max-width: 1010px;
+  width: 100%;
   margin: 0 auto;
   padding: 26px 20px;
   display: flex;
@@ -175,10 +37,10 @@ html {
 }
 
 .search-box {
-  background-color: #fafafa;
   border-radius: 4px;
   border: 1px solid #dbdbdb;
-  width: 215px;
+  max-width: 215px;
+  width: 100%;
   height: 28px;
 }
 
@@ -194,7 +56,8 @@ html {
 }
 
 .icons {
-  width: 156px;
+  max-width: 156px;
+  width: 100%;
   height: 28px;
   padding-left: 24px;
   display: flex;
@@ -202,47 +65,42 @@ html {
 }
 
 .icons svg {
-  width: 24px;
+  max-width: 24px;
+  width: 100%;
   height: 24px;
 }
 
-.first-logo {
-  width: 24px;
+.logo-img {
+  max-width: 24px;
+  width: 100%;
   height: 24px;
 }
 
-.second-logo {
-  width: 103px;
+.logo-text {
+  max-width: 103px;
+  width: 100%;
   height: 29px;
 }
 
 .container {
   padding-top: 60px;
-  /* height: 100%; */
   width: 100%;
-  height: 2400px;
-  background-color: #fafafa;
+  height: 100%;
+  max-width: 935px;
+  margin: 0 auto;
 }
 
 .main-content {
-  max-width: 935px;
-  margin: 0 auto;
-  height: 100%;
-  background-color: #fafafa;
-  /* background-color: darkblue; */
+  max-width: 614px;
+  float: left;
+  width: 100%;
 }
 
 .side-content {
+  max-width: 293px;
   float: right;
-  width: 293px;
-  position: sticky;
-  top: 77px;
-}
-
-.cards {
-  width: 614px;
-  float: left;
-  /* height: 9764px; */
+  width: 100%;
+  /* position: sticky; */
 }
 
 .card {
@@ -253,11 +111,6 @@ html {
 .card-header {
   height: 60px;
   background-color: white;
-  display: relative;
-}
-
-.writter-info {
-  position: relative;
 }
 
 .writter-info .image-wrap,
@@ -310,8 +163,9 @@ html {
   float: right;
 }
 
-.card-pictures {
+.upload-img img {
   height: 614px;
+  width: 614px;
 }
 
 .logo-actions {
@@ -436,4 +290,31 @@ html {
 .row-story {
   height: 44px;
   width: 100%;
+}
+
+.writter-upload-images {
+  position: relative;
+  overflow: hidden;
+  /* 여기서 relative는.. btn-move를 위한 것 */
+}
+
+.carousel {
+  display: flex;
+  position: relative;
+  /* 여기서 relative는 left 이동시키기 위해 */
+}
+
+.btn-move {
+  position: absolute;
+  top: 50%;
+  width: 25px;
+  height: 25px;
+}
+
+.prev {
+  left: 10px;
+}
+
+.next {
+  right: 10px;
 }
