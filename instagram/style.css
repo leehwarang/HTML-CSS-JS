@@ -292,7 +292,7 @@ body {
   width: 100%;
 }
 
-.writter-upload-images {
+.carousel-wrap {
   position: relative;
   overflow: hidden;
   /* 여기서 relative는.. btn-move를 위한 것 */
@@ -301,6 +301,7 @@ body {
 .carousel {
   display: flex;
   position: relative;
+  left: 0;
   /* 여기서 relative는 left 이동시키기 위해 */
 }
 
