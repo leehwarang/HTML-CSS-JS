@@ -49,6 +49,7 @@ class Carousel {
   setCarouselLeftPosition(direction) {
     this.currentPointer += direction * this.carouselImg.offsetWidth;
     this.carousel.style.left = `${this.currentPointer}px`;
+    this.checkFirstorLastItem();
   }
 
   attachEventToBtn(btnTag) {
@@ -64,6 +65,23 @@ class Carousel {
   init() {
     this.attachEventToBtn(this.prevBtn);
     this.attachEventToBtn(this.nextBtn);
+    this.checkFirstorLastItem();
+  }
+
+  checkFirstorLastItem() {
+    let first = 0;
+    let last = this.carousel.children.length - 1;
+
+    if (this.currentPointer === first) {
+      this.prevBtn.style.display = `none`;
+    } else {
+      this.prevBtn.style.display = `block`;
+    }
+    if (this.currentPointer === -(this.carouselImg.offsetWidth * last)) {
+      this.nextBtn.style.display = `none`;
+    } else {
+      this.nextBtn.style.display = `block`;
+    }
   }
 }
 
